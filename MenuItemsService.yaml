@@ -1,0 +1,33 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menuitemservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: MenuItemService
+  template:
+    metadata:
+      labels:
+        app: MenuItemService
+    spec:
+      containers:
+      - name: menuitemservicerepos
+        image: samplecr.azurecr.io/menuitemservicerepos:latest
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: dsconfigsn
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: menuitemservice
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: MenuItemService
